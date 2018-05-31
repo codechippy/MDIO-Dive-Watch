@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!-- a pretty simuluation of a vintage Seiko Dive Watch 6105 using SVG renders done in inkScape
+   it has a motion on the second hand that emulates the automatic movement of 6 beats per second
+   we use CSS animations rather than Javascript to keep it simple
+   a future version will have sound and allow you to move the bezel using your touchscreen or mouse
+   The page is fully responsive and scales the drawing accordingly!-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="ie=edge" http-equiv="x-ua-compatible">
+  <title>Dive Watch</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="https://material.io/static/images/simple-lp/favicons/components-192x192.png" rel="icon" sizes="192x192">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css" rel="stylesheet">
+  <script async src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js">
+  </script>
+  <link href="./divewatch.css" rel="stylesheet">
+</head>
+<body class="mdc-typography">
+  <div class="animate">
+    <img class="bg-image" src="https://storage.googleapis.com/web-content012018/Dive%20Watch/water2.jpg">
+  </div>
+  <header class="mdc-top-app-bar mdc-top-app-bar--short">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <a class="material-icons mdc-top-app-bar__navigation-icon" href="#">menu</a> <span class=
+        "mdc-top-app-bar__title">Dive Watch</span>
+      </section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <a aria-label="Help" class="material-icons mdc-top-app-bar__action-item" href="#" id="help-button">help</a>
+      </section>
+    </div>
+  </header>
+  <aside class="mdc-drawer mdc-drawer--temporary mdc-typography">
+    <nav class="mdc-drawer__drawer">
+      <header class="mdc-drawer__header">
+        <div class="mdc-drawer__header-content">
+          Dive Watch
+        </div>
+      </header>
+      <nav class="mdc-drawer__content mdc-list" id="icon-with-text-demo">
+        <a class="mdc-list-item mdc-list-item--activated" href="#"><i aria-hidden="true" class=
+        "material-icons mdc-list-item__graphic">volume_up</i>Sound
+        <div class="mdc-switch">
+          <input class="mdc-switch__native-control" id="audioToggle" role="switch" type="checkbox">
+          <div class="mdc-switch__background">
+            <div class="mdc-switch__knob"></div>
+          </div>
+        </div><label for="audioToggle">off/on</label></a>
+        <a class="mdc-list-item" href="#"><i aria-hidden="true"
+        class="material-icons mdc-list-item__graphic">watch</i>Detent
+        <div class="mdc-switch">
+          <input class="mdc-switch__native-control" id="detent-toggle" role="switch" type="checkbox">
+          <div class="mdc-switch__background">
+            <div class="mdc-switch__knob"></div>
+          </div>
+        </div><label for="detentToggle">1/2</label></a>
+        
+        <a class="mdc-list-item" href="#"><i aria-hidden="true"
+        class="material-icons mdc-list-item__graphic">important_devices</i>Debug
+        <div class="mdc-switch">
+          <input class="mdc-switch__native-control" id="debugToggle" role="switch" type="checkbox">
+          <div class="mdc-switch__background">
+            <div class="mdc-switch__knob"></div>
+          </div>
+        </div><label for="debugToggle">off/on</label></a>
+        
+        
+        
+      </nav>
+    </nav>
+  </aside>
+  <main class="mdc-toolbar-fixed-adjust">
+    <aside aria-describedby="my-mdc-dialog-description" aria-labelledby="my-mdc-dialog-label" class="mdc-dialog" id=
+    "my-mdc-dialog" role="alertdialog">
+      <div class="mdc-dialog__surface">
+        <header class="mdc-dialog__header">
+          <h2 class="mdc-dialog__header__title" id="my-mdc-dialog-label">Dive Watch V2.0</h2>
+        </header>
+        <section class="mdc-dialog__body" id="my-mdc-dialog-description">
+          <p>This is a simulation of a vintage Seiko 6105 dive watch.</p>
+          <p>The 6105 was made from 1970-1977.</p>
+          <p>It has become very collectable and can reach values of over $2000 for good examples. Early models were
+          labled with "water 150m proof". Subsequent models were changed to say "water 150m resist"</p>
+          <p>It uses a mechanical movement, the Seiko calibre 6105B, a 17 jewel full rotor automatic that runs at
+          21,600 bph, and is seen by the 6 steps per second sweep of the second hand</p>
+        </section>
+        <footer class="mdc-dialog__footer">
+          <button class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel" type=
+          "button">Close</button>
+        </footer>
+      </div>
+      <div class="mdc-dialog__backdrop"></div>
+    </aside>
+    <div class="spinner" id="spinner"></div>
+    <div id="infoPanel">
+      <div class="info">
+        <span>Width :<a id="xwidth"></a></span> <span>Height :<a id="yheight"></a></span> <span>x-coord :<a id=
+        "x-coord"></a></span> <span>y-coord :<a id="y-coord"></a></span>
+      </div>
+      <div class="info">
+        <span>x-cart :<a id="x-trans"></a></span> <span>y-cart :<a id="y-trans"></a></span> <span>radius :<a id=
+        "radius"></a></span> <span>prev-theta :<a id="prev-theta"></a></span> <span>theta :<a id="theta"></a></span>
+        <span>Audio :<a id="audio"></a></span>
+      </div>
+    </div>
+    <div class="parent" id="parent">
+      <!--we insert the svg files using the image tag and treat them like a normal image with css animations-->
+      <img class="svg1" src="https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-face.svg"> <img class=
+      "svg2" src="https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-marks.svg"> <img id="hour" src=
+      "https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-hour-hand.svg"> <img id="min" src=
+      "https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-minute-hand.svg"> <img id="sec" src=
+      "https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-second-hand.svg"> <img class="svg2" id=
+      "glass" src="https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-glass.svg"> <img class="svg2" id=
+      "bezel" src="https://storage.googleapis.com/web-content012018/Dive%20Watch/6105-bezel.svg">
+        <aside aria-describedby="my-mdc-dialog-description" aria-labelledby="my-mdc-dialog-label" class="mdc-dialog"
+        id="guide" role="alertdialog">
+          <div class="mdc-dialog__surface">
+            <header class="mdc-dialog__header">
+              <h2 class="mdc-dialog__header__title" id="my-mdc-dialog-label">Guide</h2>
+            </header>
+            <section class="mdc-dialog__body" id="my-mdc-dialog-description">
+              <p>Use mouse scroll, or touch on mobile to rotate bezel.</p>
+              <p>Enable bezel clicks via drawer from hamburger menu.</p>
+              <p>Debug mode shows circular tracking of touch.</p>
+            </section>
+            <footer class="mdc-dialog__footer">
+              <button class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel" type=
+              "button">Close</button>
+            </footer>
+          </div>
+          <div class="mdc-dialog__backdrop"></div>
+        </aside>
+    </div>
+  </main>
+  <div class="app-fab--absolute">
+    <button aria-label="Back to top" class="mdc-fab material-icons" id="float-button"><span class=
+    "mdc-fab__icon">cached</span></button>
+  </div>
+  <script src="./divewatch.js" type="text/javascript">
+  </script>
+  <script>
+
+  //Set up event listeners
+  //document.getElementById('float-button').addEventListener('click', scrollTop);
+
+  //Set help dialog box
+
+  /*dialog.listen('MDCDialog:accept', function() {
+  console.log('accepted');
+  })
+
+  dialog.listen('MDCDialog:cancel', function() {
+  console.log('canceled');
+  })
+  */
+
+
+
+  </script>
+
+</body>
+</html>

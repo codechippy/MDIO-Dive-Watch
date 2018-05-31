@@ -1,0 +1,150 @@
+/**all our svg files a size of 480x480 and start at 0,0 and centre at 100,100 for reference*/
+
+body {
+  overflow: hidden;
+  /*touch-action: none;*/
+  --mdc-theme-primary: #5886e0;
+  --mdc-theme-secondary: #FF3D00;
+  --mdc-theme-background: #E1F5FE;
+}
+.bg-image {
+  position: fixed;
+  left: -100px;
+  top: -100px;
+  overflow: hidden;
+  width: 150%;
+  height: 120%;
+  /*animation-name: grow;
+  animation-duration: 60s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;*/
+  z-index: -99;
+}
+@keyframes grow {
+  0% {
+    transform: scale(1, 1) translate(50px, 0px);
+  }
+  50% {
+    transform: scale(1.1, 1.1) translate(100px, 100px);
+  }
+  100% {
+    transform: scale(1, 1) translate(50px, 0px);
+  }
+}
+
+.mdc-drawer__header {
+  background-color: grey;
+  background-image: url("https://storage.googleapis.com/web-content012018/Dive%20Watch/diver.png");
+  background-size: contain;
+  color: white;
+}
+.mdc-drawer__drawer-header-content {
+  background-color: blue;
+}
+.mdc-top-app-bar--short-collapsed {
+  width: 120px;
+}
+.mdc-drawer__drawer {
+  opacity: 0.9;
+}
+/* Here we use relative and absolute positioning to get a number of images to overlay each other*/
+
+/*first we set the parent div to be realtive to to document*/
+
+/*hides the touch trcking data*/
+
+.info {
+  display: block;
+  background-image: linear-gradient(to left, transparent 0%, rgba(88, 134, 224, 1) 100%);
+  color: white;
+}
+.info>span {
+  color: #00ff00;
+}
+.info a {
+  color: #FF3D00;
+}
+
+.parent {
+  position: relative;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* to avoid scroll bars we set the width less than 100% as borders add to the overall width*/
+  height: auto;
+}
+/**All subsequent svg images are placed in absolute position to the div parent div*/
+/**sec uses a steps for the animation to simulate the 6beats per sec of real watch*/
+
+#sec {
+  animation: ksecond-swing 60s steps(360) infinite;
+}
+#bezel {
+  border-style: none;
+  border-width: 0;
+  /**transition: transform 1s;*/
+}
+.svg1, .svg2, #hour, #min, #sec {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transform-origin: center 100px, 100px;
+  transform: rotate(0deg);
+}
+.svg1 {
+  position: relative;
+  /* overide the position param with "relative" as this is the first item in the div*/
+}
+
+
+#help-mdc-dialog {
+  margin: auto;
+}
+#help-button {
+  margin:2px;
+}
+.app-fab--absolute {
+  position: fixed;
+  bottom: 1.0rem;
+  right: 1.0rem;
+}
+a, u {
+  text-decoration: none;
+}
+p, h2, h3 {
+  /*font-family: 'Roboto', sans-serif;*/
+  font-family: 'Nunito', sans-serif;
+}
+p {
+  font-size: 14px;
+}
+@media(min-width: 1024px) {
+  .app-fab--absolute {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+
+/**props for this spinner  https://github.com/buzinas/tiny-spinner*/
+
+.spinner {
+  position: fixed;
+  top: calc(50% - 1rem);
+  left: calc(50% - 1rem);
+  width: 2rem;
+  height: 2rem;
+  border: 0.25rem solid #ffc000;
+  border-bottom: 0.25rem solid rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 9999;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
